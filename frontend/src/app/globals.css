@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-fg: #1a1a1a;
+  --color-bg: #ffffff;
+  --color-brand: #0f4c81;
+}
+
+html {
+  font-size: 100%;
+}
+
+body {
+  @apply bg-white text-[var(--color-fg)] antialiased;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+a {
+  @apply text-[var(--color-brand)] underline underline-offset-2;
+}
+
+a:hover {
+  @apply text-brand-dark;
+}
+
+:focus-visible {
+  @apply outline-2 outline-offset-2 outline-brand;
+}
