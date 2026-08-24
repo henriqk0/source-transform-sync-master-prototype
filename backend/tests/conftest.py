@@ -28,11 +28,11 @@ def session_factory(tmp_path):
 @pytest.fixture
 def app(session_factory, monkeypatch):
     """FastAPI application wired to the per-test session factory."""
+    from portal.config import load_settings
     from portal.main import create_app
 
-    # Hermetic to ambient env (backend/.env leaks via research_domain/eo_lib
-    # import-time load_dotenv): never bootstrap the ADMIN account in tests.
-    monkeypatch.delenv("ADMIN_USERNAME", raising=False)
-    monkeypatch.delenv("ADMIN_PASSWORD", raising=False)
-    monkeypatch.setenv("PORTAL_DATA_DIR", FIXTURES_DIR)
-    return create_app(session_factory=session_factory)
+    # Hermetic to every ambient config source (os.environ and the
+    # backend/.env fallback): an explicit env dict makes load_settings
+    # ignore both, so no ADMIN bootstrap can ever run during tests.
+    settings = load_settings(env={"PORTAL_DATA_DIR": FIXTURES_DIR})
+    return create_app(session_factory=session_factory, settings=settings)
