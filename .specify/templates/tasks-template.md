@@ -9,12 +9,7 @@ description: "Task list template for feature implementation"
 
 **Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
 
-**Tests**: Test tasks are MANDATORY (Constitution Article II — TDD). Tests MUST
-be written before their implementation tasks, confirmed failing (Red), then
-made to pass (Green). Test coverage is layered: unit tests (Models, Services,
-Repositories against a real/containerized DB), contract tests for every
-Controller endpoint, integration tests for cross-module flows, and UI tests
-with accessibility assertions.
+**Tests**: The examples below include test tasks. Tests are OPTIONAL - only include them if explicitly requested in the feature specification.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
@@ -72,9 +67,8 @@ Examples of foundational tasks (adjust based on your project):
 - [ ] T005 [P] Implement authentication/authorization framework
 - [ ] T006 [P] Setup API routing and middleware structure
 - [ ] T007 Create base models/entities that all stories depend on
-- [ ] T008 Configure error handling and logging infrastructure (incl. central masking layer for personal data - Art. V)
+- [ ] T008 Configure error handling and logging infrastructure
 - [ ] T009 Setup environment configuration management
-- [ ] T010 [P] Classify personal-data fields (public/internal/sensitive) and record masking rules per spec (Art. V)
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -86,26 +80,21 @@ Examples of foundational tasks (adjust based on your project):
 
 **Independent Test**: [How to verify this story works on its own]
 
-### Tests for User Story 1 (MANDATORY - write FIRST, confirm RED before implementation) ⚠️
+### Tests for User Story 1 (OPTIONAL - only if tests requested) ⚠️
 
 > **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T010 [P] [US1] Unit test for [Model/Entity] in tests/unit/test_[name].py
-- [ ] T011 [P] [US1] Unit test for [Service] in tests/unit/test_[service].py
-- [ ] T012 [P] [US1] Repository test against real/containerized DB in tests/unit/test_[repository].py
-- [ ] T013 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T014 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
-- [ ] T015 [P] [US1] UI test with accessibility assertions (Dynamic Type, VoiceOver) in tests/ui/test_[name].py
-- [ ] T016 [US1] Denied-case test for [security-relevant change, if any] in tests/unit/test_[name].py
+- [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
+- [ ] T011 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
 
 ### Implementation for User Story 1
 
-- [ ] T017 [P] [US1] Create [Entity1] model in src/models/[entity1].py
-- [ ] T018 [P] [US1] Create [Entity2] model in src/models/[entity2].py
-- [ ] T019 [US1] Implement [Service] in src/services/[service].py (depends on T017, T018)
-- [ ] T020 [US1] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T021 [US1] Add validation and error handling
-- [ ] T022 [US1] Add logging for user story 1 operations (through the masking layer - Art. V)
+- [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
+- [ ] T013 [P] [US1] Create [Entity2] model in src/models/[entity2].py
+- [ ] T014 [US1] Implement [Service] in src/services/[service].py (depends on T012, T013)
+- [ ] T015 [US1] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T016 [US1] Add validation and error handling
+- [ ] T017 [US1] Add logging for user story 1 operations
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -117,19 +106,17 @@ Examples of foundational tasks (adjust based on your project):
 
 **Independent Test**: [How to verify this story works on its own]
 
-### Tests for User Story 2 (MANDATORY - write FIRST, confirm RED before implementation) ⚠️
+### Tests for User Story 2 (OPTIONAL - only if tests requested) ⚠️
 
-- [ ] T025 [P] [US2] Unit test for [Model/Entity] in tests/unit/test_[name].py
-- [ ] T026 [P] [US2] Unit test for [Service] in tests/unit/test_[service].py
-- [ ] T027 [P] [US2] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T028 [P] [US2] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T018 [P] [US2] Contract test for [endpoint] in tests/contract/test_[name].py
+- [ ] T019 [P] [US2] Integration test for [user journey] in tests/integration/test_[name].py
 
 ### Implementation for User Story 2
 
-- [ ] T029 [P] [US2] Create [Entity] model in src/models/[entity].py
-- [ ] T030 [US2] Implement [Service] in src/services/[service].py
-- [ ] T031 [US2] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T032 [US2] Integrate with User Story 1 components (if needed)
+- [ ] T020 [P] [US2] Create [Entity] model in src/models/[entity].py
+- [ ] T021 [US2] Implement [Service] in src/services/[service].py
+- [ ] T022 [US2] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T023 [US2] Integrate with User Story 1 components (if needed)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
@@ -141,18 +128,16 @@ Examples of foundational tasks (adjust based on your project):
 
 **Independent Test**: [How to verify this story works on its own]
 
-### Tests for User Story 3 (MANDATORY - write FIRST, confirm RED before implementation) ⚠️
+### Tests for User Story 3 (OPTIONAL - only if tests requested) ⚠️
 
-- [ ] T033 [P] [US3] Unit test for [Model/Entity] in tests/unit/test_[name].py
-- [ ] T034 [P] [US3] Unit test for [Service] in tests/unit/test_[service].py
-- [ ] T035 [P] [US3] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T036 [P] [US3] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T024 [P] [US3] Contract test for [endpoint] in tests/contract/test_[name].py
+- [ ] T025 [P] [US3] Integration test for [user journey] in tests/integration/test_[name].py
 
 ### Implementation for User Story 3
 
-- [ ] T037 [P] [US3] Create [Entity] model in src/models/[entity].py
-- [ ] T038 [US3] Implement [Service] in src/services/[service].py
-- [ ] T039 [US3] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T026 [P] [US3] Create [Entity] model in src/models/[entity].py
+- [ ] T027 [US3] Implement [Service] in src/services/[service].py
+- [ ] T028 [US3] Implement [endpoint/feature] in src/[location]/[file].py
 
 **Checkpoint**: All user stories should now be independently functional
 
@@ -169,10 +154,8 @@ Examples of foundational tasks (adjust based on your project):
 - [ ] TXXX [P] Documentation updates in docs/
 - [ ] TXXX Code cleanup and refactoring
 - [ ] TXXX Performance optimization across all stories
-- [ ] TXXX Load/latency test for performance-sensitive endpoints in CI (Art. IV)
-- [ ] TXXX [P] Additional unit tests in tests/unit/
-- [ ] TXXX Security hardening (incl. LGPD denied-case tests - Art. V)
-- [ ] TXXX Accessibility audit (Dynamic Type, contrast, VoiceOver - Arts. I, VI)
+- [ ] TXXX [P] Additional unit tests (if requested) in tests/unit/
+- [ ] TXXX Security hardening
 - [ ] TXXX Run quickstart.md validation
 
 ---
@@ -196,7 +179,7 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Within Each User Story
 
-- Tests MUST be written and FAIL before implementation (Constitution Art. II)
+- Tests (if included) MUST be written and FAIL before implementation
 - Models before services
 - Services before endpoints
 - Core implementation before integration
@@ -216,7 +199,7 @@ Examples of foundational tasks (adjust based on your project):
 ## Parallel Example: User Story 1
 
 ```bash
-# Launch all tests for User Story 1 together (MANDATORY - written first):
+# Launch all tests for User Story 1 together (if tests requested):
 Task: "Contract test for [endpoint] in tests/contract/test_[name].py"
 Task: "Integration test for [user journey] in tests/integration/test_[name].py"
 

@@ -56,7 +56,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 ## Outline
 
-1. **Setup**: Run `.specify/scripts/bash/setup-tasks.sh --json` from repo root and parse FEATURE_DIR, TASKS_TEMPLATE, and AVAILABLE_DOCS list. `FEATURE_DIR` and `TASKS_TEMPLATE` must be absolute paths when provided. `AVAILABLE_DOCS` is a list of document names/relative paths available under `FEATURE_DIR` (for example `research.md` or `contracts/`). For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
+1. **Setup**: Run `.specify/scripts/bash/setup-tasks.sh --json` from repo root and parse FEATURE_DIR, TASKS_TEMPLATE_CONTENT, TASKS_TEMPLATE, and AVAILABLE_DOCS list. `FEATURE_DIR` and `TASKS_TEMPLATE` must be absolute paths when provided. `AVAILABLE_DOCS` is a list of document names/relative paths available under `FEATURE_DIR` (for example `research.md` or `contracts/`). For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
 
 2. **Load design documents**: Read from FEATURE_DIR:
    - **Required**: plan.md (tech stack, libraries, structure), spec.md (user stories with priorities)
@@ -75,12 +75,12 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Create parallel execution examples per user story
    - Validate task completeness (each user story has all needed tasks, independently testable)
 
-4. **Generate tasks.md**: Read the tasks template from TASKS_TEMPLATE (from the JSON output above) and use it as structure. If TASKS_TEMPLATE is empty, fall back to `.specify/templates/tasks-template.md`. Fill with:
+4. **Generate tasks.md**: Use TASKS_TEMPLATE_CONTENT (from the JSON output above) as the structure. For compatibility with older setup scripts that omit TASKS_TEMPLATE_CONTENT, read TASKS_TEMPLATE instead. Fill with:
    - Correct feature name from plan.md
    - Phase 1: Setup tasks (project initialization)
    - Phase 2: Foundational tasks (blocking prerequisites for all user stories)
    - Phase 3+: One phase per user story (in priority order from spec.md)
-    - Each phase includes: story goal, independent test criteria, tests (MANDATORY, written before implementation), implementation tasks
+   - Each phase includes: story goal, independent test criteria, tests (if requested), implementation tasks
    - Final Phase: Polish & cross-cutting concerns
    - All tasks must follow the strict checklist format (see Task Generation Rules below)
    - Clear file paths for each task
@@ -140,10 +140,7 @@ The tasks.md should be immediately executable - each task must be specific enoug
 
 **CRITICAL**: Tasks MUST be organized by user story to enable independent implementation and testing.
 
-**Tests are MANDATORY**: Per the project constitution (Article II — TDD), test
-tasks MUST be generated for every user story and sequenced BEFORE their
-implementation tasks. If the constitution is an unfilled template, default to
-test-first anyway unless the user explicitly opts out.
+**Tests are OPTIONAL**: Only generate test tasks if explicitly requested in the feature specification or if user requests TDD approach.
 
 ### Checklist Format (REQUIRED)
 
@@ -185,12 +182,12 @@ Every task MUST strictly follow this format:
      - Models needed for that story
      - Services needed for that story
      - Interfaces/UI needed for that story
-     - Tests specific to that story (MANDATORY, written first)
+     - If tests requested: Tests specific to that story
    - Mark story dependencies (most stories should be independent)
 
 2. **From Contracts**:
    - Map each interface contract → to the user story it serves
-   - Each interface contract → contract test task [P] before implementation in that story's phase
+   - If tests requested: Each interface contract → contract test task [P] before implementation in that story's phase
 
 3. **From Data Model**:
    - Map each entity to the user story(ies) that need it
@@ -207,7 +204,7 @@ Every task MUST strictly follow this format:
 - **Phase 1**: Setup (project initialization)
 - **Phase 2**: Foundational (blocking prerequisites - MUST complete before user stories)
 - **Phase 3+**: User Stories in priority order (P1, P2, P3...)
-  - Within each story: Tests (MANDATORY, written first) → Models → Services → Endpoints → Integration
+  - Within each story: Tests (if requested) → Models → Services → Endpoints → Integration
   - Each phase should be a complete, independently testable increment
 - **Final Phase**: Polish & Cross-Cutting Concerns
 

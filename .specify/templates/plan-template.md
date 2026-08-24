@@ -36,41 +36,11 @@
 
 **Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
 
-**Personal Data / LGPD**: [e.g., personal data fields stored, sensitivity classification (public/internal/sensitive), retention periods or N/A]
-
-**Domain Model Source**: [e.g., `research-domain` external package (pinned version), or NEEDS CLARIFICATION]
-
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-The constitution (`.specify/memory/constitution.md`) is non-negotiable. Confirm
-and record each gate explicitly:
-
-- **TDD sequencing (Article II)**: every implementation task has a preceding
-  failing test task; no production code before its test. Task lists that place
-  implementation before tests are malformed.
-- **Architecture (Article I)**: module boundaries drawn around business
-  capabilities; MVC + Repository & Service with one-way dependency
-  (Controller → Service → Repository → Model); no cross-module data access
-  outside the owning module's Service layer.
-- **Performance budget (Article IV)**: performance-sensitive endpoints
-  identified with a stated mitigation (indexing, caching, pagination, async);
-  operations over the 2s p95 budget moved to async with status polling.
-- **Data classification (Article V)**: every field/table storing personal data
-  classified (public / internal / sensitive) with masking/access rules applied
-  from the first commit; security-relevant changes include a denied-case test.
-- **HIG & accessibility (Articles I, VI)**: UI screens conform to platform
-  patterns; custom controls justified and recorded in the spec; error/empty/
-  loading states and accessibility (Dynamic Type, contrast, VoiceOver) planned
-  per screen.
-- **Domain-first modeling (Article VII)**: canonical domain entities sourced
-  from the `research-domain` external package (pinned version recorded); no
-  local redefinition of canonical entities; data-model.md documents the
-  mapping to canonical entities.
-
-If any gate cannot be met, record the deviation and its justification in
-Complexity Tracking below.
+[Gates determined based on constitution file]
 
 ## Project Structure
 

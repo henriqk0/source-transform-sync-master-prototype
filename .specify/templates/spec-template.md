@@ -103,33 +103,6 @@
 - **[Entity 1]**: [What it represents, key attributes without implementation]
 - **[Entity 2]**: [What it represents, relationships to other entities]
 
-## Constitution Compliance *(mandatory)*
-
-<!--
-  Every spec MUST demonstrate compliance with .specify/memory/constitution.md.
-  Fill in each item; "N/A" requires a one-line justification.
--->
-
-- **CC-001 (TDD - Art. II)**: The plan generated from this spec MUST sequence a
-  failing test before each implementation task.
-- **CC-002 (Data classification - Art. V)**: Every field/table storing personal
-  data is classified (public / internal / sensitive) and listed here, with its
-  masking/access rules.
-- **CC-003 (Performance - Art. IV)**: Endpoints risking the 2s p95 budget are
-  listed with their mitigation; heavy operations are moved to async flows.
-- **CC-004 (LGPD rights - Art. V)**: Retention, access, correction, and erasure
-  are implemented as Service operations for any module storing personal data.
-- **CC-005 (Security denied-case - Art. V)**: Auth/permissions/masking changes
-  include a test asserting the denied case.
-- **CC-006 (HIG - Art. I)**: UI screens conform to platform patterns; any
-  custom control includes its recorded justification.
-- **CC-007 (Accessibility - Art. VI)**: Dynamic Type, contrast, and VoiceOver
-  verification are planned for every screen.
-- **CC-008 (Domain-first - Art. VII)**: Canonical domain entities are sourced
-  from the `research-domain` external package; no local redefinition; any
-  feature-specific projections map to canonical entities at the module
-  boundary.
-
 ## Success Criteria *(mandatory)*
 
 <!--
