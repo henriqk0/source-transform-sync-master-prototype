@@ -307,3 +307,14 @@ latent atomicity and concurrency-response gaps. All other intent is satisfied.
 
 - [ ] T063 Make the `article_counts_by_year` rebuild participate in the seed's injected transaction (give `ArticleCountRepository` the same session-injection pattern as `SQLiteRepository` in `backend/src/portal/researchdata/repositories.py`) so no mid-seed commit can publish data before the seed transaction completes, per FR-006/SC-005 and Art. V (partial)
 - [ ] T064 Return HTTP 400 "Seed already running" instead of an unhandled 500 when two concurrent seed requests race past the running-state check in `backend/src/portal/ingestion/controllers.py` (catch the `RuntimeError` from `sync_states.begin()`), per FR-008 (partial)
+
+---
+
+## Phase 10: Hardening & Registration Linkage
+
+**Purpose**: Test hermeticity fixes and the admin registration CNPq id
+linkage (login reuse of a saved professor instead of creating a duplicate).
+
+- [X] T065 [P] Make tests hermetic to ambient env: strip `ADMIN_USERNAME`/`ADMIN_PASSWORD` in the `app` fixture (`backend/tests/conftest.py`) so a local `backend/.env` (loaded by research_domain/eo_lib at import time) can no longer bootstrap a conflicting ADMIN account; document `backend/.env` behavior in quickstart.md ("Local `.env`"); gitignore `backend/data/lattes.list`
+- [X] T066 Admin registration accepts `cnpq_id` (FR-017): portal-owned `ResearcherCnpq` projection (Art. VII) + service linking — when a professor with that CNPq id is already saved in the DB, no new professor row is created and the new login links to the saved professor; covered by contract tests in `backend/tests/contract/test_admin_professors.py`, form field in `frontend/src/app/admin/page.tsx`, documented in contracts/professors.md and data-model.md
+- [X] T067 Ingestion extracts lattes ids from researchers' `cnpq_url` (`lattes.cnpq.br/<digits>`) into `ResearcherCnpq` during seeding, with the repository joining the seed's injected transaction (FR-006); registrations now link logins to *seeded* professors, not only to previously registered ones — covered by unit test (`test_ingestion_mapping.py`) and integration test (`test_seed_to_profile.py`)

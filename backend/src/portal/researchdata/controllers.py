@@ -21,6 +21,7 @@ class ProfessorRegistration(BaseModel):
     password: str = Field(min_length=8)
     emails: list[str] | None = None
     resume: str | None = None
+    cnpq_id: str | None = Field(default=None, min_length=1)
 
 
 class ProfessorEdit(BaseModel):
@@ -71,6 +72,7 @@ def create_researchdata_router(service: ResearchDataService) -> APIRouter:
                 password=body.password,
                 emails=body.emails,
                 resume=body.resume,
+                cnpq_id=body.cnpq_id,
             )
         except RegistrationError:
             raise HTTPException(

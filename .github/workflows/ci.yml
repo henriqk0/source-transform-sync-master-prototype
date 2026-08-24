@@ -74,4 +74,7 @@ jobs:
 
       - name: Playwright tests
         working-directory: frontend
+        env:
+          # No repo venv in CI; backend deps are installed globally above.
+          E2E_PYTHON: python3
         run: npx playwright test --reporter=line

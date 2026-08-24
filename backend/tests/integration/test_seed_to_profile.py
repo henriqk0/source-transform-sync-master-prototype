@@ -7,6 +7,8 @@ import os
 from fastapi.testclient import TestClient
 
 from portal.ingestion.services import IngestionService
+from portal.researchdata.repositories import RepositoryProvider
+from portal.researchdata.services import ResearchDataService
 
 FIXTURES = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "..", "fixtures", "seed"
@@ -37,3 +39,22 @@ def test_seed_then_directory_search_finds_professors(session_factory, app):
     body = client.get("/api/professors?q=joao").json()
     assert body["total"] == 1
     assert body["items"][0]["name"] == "Joao da Silva"
+
+
+def test_register_with_seeded_lattes_id_links_to_saved_professor(session_factory):
+    IngestionService(session_factory, data_dir=FIXTURES).seed()
+    provider = RepositoryProvider(session_factory)
+    professors_before = provider.researchers.count()
+
+    service = ResearchDataService(session_factory)
+    result = service.register_professor(
+        name="Karin Satie Komati",
+        username="karin",
+        password="senha-segura-123",
+        cnpq_id="1111222233334444",
+    )
+
+    # No duplicate professor: the login links to the seeded researcher.
+    assert result["researcher_id"] == 1
+    assert result["username"] == "karin"
+    assert provider.researchers.count() == professors_before

@@ -129,14 +129,27 @@ class ResearchDataService:
         password: str,
         emails: list[str] | None = None,
         resume: str | None = None,
+        cnpq_id: str | None = None,
     ) -> dict:
-        """ADMIN-only registration: Researcher (DB only) + PROFESSOR account."""
+        """ADMIN-only registration: Researcher (DB only) + PROFESSOR account.
+
+        When ``cnpq_id`` matches a professor already saved in the database, no
+        new Researcher is created — the new login links to that professor."""
         account_repository = AuthRepository(self._session_factory)
         if account_repository.get_by_username(username) is not None:
             raise RegistrationError("Username already exists")
 
-        researcher = Researcher(name=name, resume=resume)
-        self.provider.researchers.add(researcher)
+        saved_researcher_id = (
+            self.provider.researcher_cnpqs.researcher_for(cnpq_id) if cnpq_id else None
+        )
+        if saved_researcher_id is not None:
+            researcher = self.provider.researchers.get_by_id(saved_researcher_id)
+        else:
+            researcher = Researcher(name=name, resume=resume)
+            self.provider.researchers.add(researcher)
+            if cnpq_id:
+                self.provider.researcher_cnpqs.record(researcher.id, cnpq_id)
+
         if emails:
             self.provider.researcher_emails.set_emails(researcher.id, emails)
 

@@ -20,7 +20,7 @@ RESEARCHERS = [
         "name": "Maria Alice Veiga Ferreira De Souza",
         "identification_id": "LGPD-abc123",
         "birthday": None,
-        "cnpq_url": None,
+        "cnpq_url": "http://lattes.cnpq.br/1111222233334444",
         "google_scholar_url": None,
         "resume": "Professora titular",
         "citation_names": "[]",

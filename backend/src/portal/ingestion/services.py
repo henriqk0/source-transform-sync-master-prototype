@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from datetime import date
 from typing import Any
 
@@ -40,6 +41,10 @@ ARTICLE_TYPE_ALIASES = {
 }
 ACTIVE_INITIATIVE_STATUSES = {"active", "in progress"}
 
+# Lattes id embedded in the canonical cnpq_url; used to link admin-created
+# logins to professors already saved by the seed (data-model.md §2/§6).
+_LATTES_URL_PATTERN = re.compile(r"lattes\.cnpq\.br/(\d+)")
+
 COUNTS_KEYS = [
     "researchers",
     "articles",
@@ -71,6 +76,13 @@ def _as_date(value: Any) -> date | None:
     if isinstance(value, date):
         return value
     return date.fromisoformat(str(value)[:10])
+
+
+def _lattes_id_from_cnpq_url(url: Any) -> str | None:
+    if not url:
+        return None
+    match = _LATTES_URL_PATTERN.search(str(url))
+    return match.group(1) if match else None
 
 
 class SeedError(RuntimeError):
@@ -292,6 +304,10 @@ class IngestionService:
             )
             self._provider.researchers.add(researcher)
             self._counts["researchers"] += 1
+
+            lattes_id = _lattes_id_from_cnpq_url(row.get("cnpq_url"))
+            if lattes_id:
+                self._provider.researcher_cnpqs.record(researcher.id, lattes_id)
 
             if row.get("identification_id") or row.get("birthday"):
                 birthday = row.get("birthday")

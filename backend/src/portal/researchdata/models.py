@@ -101,6 +101,21 @@ class ResearcherEmail(Base):
         self.email = email
 
 
+class ResearcherCnpq(Base):
+    """Portal-owned boundary table linking professors to their CNPq ids
+    (canonical Researcher carries only cnpq_url; Art. VII). Used by admin
+    registration to link logins to professors already saved in the DB."""
+
+    __tablename__ = "researcher_cnpqs"
+
+    researcher_id = Column(Integer, ForeignKey("researchers.id"), primary_key=True)
+    cnpq_id = Column(String(64), nullable=False, unique=True)
+
+    def __init__(self, researcher_id: int, cnpq_id: str) -> None:
+        self.researcher_id = researcher_id
+        self.cnpq_id = cnpq_id
+
+
 class ArticleCountByYear(Base):
     """Portal-owned pre-aggregation (ResearchData module) serving FR-003
     within the 2s p95 budget (Art. IV). Rebuilt during seeding."""

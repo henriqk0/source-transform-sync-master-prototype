@@ -30,5 +30,9 @@ def app(session_factory, monkeypatch):
     """FastAPI application wired to the per-test session factory."""
     from portal.main import create_app
 
+    # Hermetic to ambient env (backend/.env leaks via research_domain/eo_lib
+    # import-time load_dotenv): never bootstrap the ADMIN account in tests.
+    monkeypatch.delenv("ADMIN_USERNAME", raising=False)
+    monkeypatch.delenv("ADMIN_PASSWORD", raising=False)
     monkeypatch.setenv("PORTAL_DATA_DIR", FIXTURES_DIR)
     return create_app(session_factory=session_factory)

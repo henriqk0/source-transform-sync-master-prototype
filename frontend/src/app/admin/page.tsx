@@ -45,6 +45,7 @@ function RegistrationForm() {
   const [emails, setEmails] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [cnpqId, setCnpqId] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -63,6 +64,7 @@ function RegistrationForm() {
           .filter(Boolean),
         username,
         password,
+        ...(cnpqId ? { cnpq_id: cnpqId } : {}),
       });
       setMessage(
         `Professor registered: ${created.username} (researcher id ${created.researcher_id}).`,
@@ -71,6 +73,7 @@ function RegistrationForm() {
       setEmails("");
       setUsername("");
       setPassword("");
+      setCnpqId("");
     } catch (err) {
       if (err instanceof ApiError) {
         const detail = typeof err.detail === "string" ? err.detail : err.message;
@@ -108,6 +111,24 @@ function RegistrationForm() {
           placeholder="joao@ifes.edu.br, joao@example.com"
           className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
         />
+      </div>
+      <div>
+        <label htmlFor="reg-cnpq-id" className="block text-sm font-medium">
+          CNPq ID
+        </label>
+        <input
+          id="reg-cnpq-id"
+          value={cnpqId}
+          onChange={(event) => setCnpqId(event.target.value)}
+          placeholder="16-digit CNPq/Lattes ID"
+          autoComplete="off"
+          inputMode="numeric"
+          className="mt-1 w-full rounded border border-gray-300 px-3 py-2"
+        />
+        <p className="mt-1 text-xs text-gray-600">
+          If a professor with this CNPq ID already exists, the new login is
+          linked to their saved profile instead of creating a new professor.
+        </p>
       </div>
       <div>
         <label htmlFor="reg-username" className="block text-sm font-medium">

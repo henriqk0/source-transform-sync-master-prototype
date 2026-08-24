@@ -36,6 +36,7 @@ from portal.researchdata.models import (
     ArticleCountByYear,
     AuditLog,
     ResearcherCampus,
+    ResearcherCnpq,
     ResearcherEmail,
     ResearcherSensitive,
 )
@@ -493,6 +494,55 @@ class ResearcherEmailRepository:
             self._release(session)
 
 
+class ResearcherCnpqRepository:
+    """Portal-owned repository linking professors to their CNPq ids."""
+
+    def __init__(
+        self, session_factory: SessionFactory, session: Session | None = None
+    ) -> None:
+        self._session_factory = session_factory
+        self._injected_session = session
+
+    def _session(self) -> Session:
+        if self._injected_session is not None:
+            return self._injected_session
+        return self._session_factory()
+
+    def _commit_or_defer(self, session: Session) -> None:
+        if self._injected_session is None:
+            session.commit()
+
+    def _release(self, session: Session) -> None:
+        if self._injected_session is None:
+            session.close()
+
+    def researcher_for(self, cnpq_id: str) -> int | None:
+        session = self._session()
+        try:
+            row = (
+                session.query(ResearcherCnpq)
+                .filter(ResearcherCnpq.cnpq_id == cnpq_id)
+                .first()
+            )
+            return row.researcher_id if row is not None else None
+        finally:
+            self._release(session)
+
+    def record(self, researcher_id: int, cnpq_id: str) -> None:
+        session = self._session()
+        try:
+            exists = (
+                session.query(ResearcherCnpq)
+                .filter(ResearcherCnpq.cnpq_id == cnpq_id)
+                .first()
+            )
+            if exists is None:
+                session.add(ResearcherCnpq(researcher_id, cnpq_id))
+                self._commit_or_defer(session)
+        finally:
+            self._release(session)
+
+
 class ArticleCountRepository:
     """Portal-owned pre-aggregation repository (FR-003, Art. IV)."""
 
@@ -615,6 +665,7 @@ class RepositoryProvider:
         self.article_counts = ArticleCountRepository(session_factory)
         self.researcher_campuses = ResearcherCampusRepository(session_factory, session)
         self.researcher_emails = ResearcherEmailRepository(session_factory)
+        self.researcher_cnpqs = ResearcherCnpqRepository(session_factory, session)
         self.researcher_sensitive = ResearcherSensitiveRepository(
             session_factory, session
         )

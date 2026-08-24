@@ -50,6 +50,15 @@ Register a professor (ADMIN only).
 | `resume` | string | no |
 | `username` | string | yes |
 | `password` | string | yes (min 8) |
+| `cnpq_id` | string | no |
+
+**CNPq id linkage**: when `cnpq_id` matches a professor already saved in the
+database — including professors loaded by seeding, whose lattes ids are
+extracted from their `cnpq_url` at seed time — no new professor row is
+created: the new login links to that existing `Researcher` (`researcher_id`
+of the response is the saved professor's id). A first-time `cnpq_id` creates
+the professor and records the mapping. Researchers without a `cnpq_url` in
+the source data cannot be matched by lattes id.
 
 **Responses**:
 
@@ -62,7 +71,9 @@ Register a professor (ADMIN only).
 | 422 | validation error |
 
 **Contract tests**: 201 happy path; 403 for PROFESSOR/anon (denied case);
-400 duplicate username; created account can log in.
+400 duplicate username; created account can log in; `cnpq_id` linkage reuses
+the saved professor (no duplicate row) and the linked login authenticates with
+that `researcher_id`.
 
 ## PATCH /api/professors/{id}
 

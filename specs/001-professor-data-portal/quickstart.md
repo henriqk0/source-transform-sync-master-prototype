@@ -31,6 +31,17 @@ uvicorn portal.main:app --app-dir backend/src --port 8000 &   # backend
 cd frontend && npm run dev                                     # frontend
 ```
 
+## Local `.env`
+
+`backend/.env` (gitignored) holds local settings: `PORTAL_DB_PATH`,
+`PORTAL_JWT_SECRET`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `PORTAL_DATA_DIR`.
+It is loaded automatically because `research_domain`/`eo_lib` call
+`load_dotenv()` at import time; process environment variables win over it.
+
+The pytest suite is hermetic to these variables — the `app` fixture strips
+`ADMIN_USERNAME`/`ADMIN_PASSWORD`, so no admin bootstrap happens during tests
+and the suite passes regardless of your local `.env`.
+
 ## Validation scenarios
 
 ### Scenario A — Seed the database (US2)

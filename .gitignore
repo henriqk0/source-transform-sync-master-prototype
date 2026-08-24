@@ -17,6 +17,12 @@ backend/*.db-wal
 backend/*.db-shm
 backend/*.db-journal
 backend/tests/**/*.db
+backend/data/*.json
+backend/data/**/*.parquet
+backend/data/research_group_membership_graphs/
+backend/data/research_group_membership_graphs/*
+backend/data/research_group_relationship_graphs/*.json
+
 
 # Node / Next.js
 node_modules/

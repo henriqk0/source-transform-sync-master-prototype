@@ -1,7 +1,18 @@
 import { defineConfig, devices } from "@playwright/test";
+import path from "node:path";
 
-const E2E_SERVER = "/home/henriq/Documents/gitProjs/source-transform-sync-master-prototype/backend/tests/scripts/e2e_server.py";
-const VENV_PYTHON = "/tmp/opencode/portalvenv/bin/python";
+// Repo-relative so the config works from any checkout; override the backend
+// interpreter with E2E_PYTHON where the repo venv does not exist (e.g. CI).
+const REPO_ROOT = path.resolve(__dirname, "..");
+const E2E_SERVER = path.join(
+  REPO_ROOT,
+  "backend",
+  "tests",
+  "scripts",
+  "e2e_server.py",
+);
+const VENV_PYTHON =
+  process.env.E2E_PYTHON ?? path.join(REPO_ROOT, "backend", ".venv", "bin", "python");
 
 export default defineConfig({
   testDir: "./tests",

@@ -77,6 +77,21 @@ and errors are only present in terminal states.
 PK: `(researcher_id, year)`. Rebuilt during seeding/sync from `Article`
 author links; serves FR-003 within the 2s budget (Art. IV).
 
+### `ResearcherCnpq` (owned by ResearchData module — CNPq id projection)
+
+| Field | Type | Constraints |
+|-------|------|-------------|
+| `researcher_id` | int | PK, FK → `researchers.id` |
+| `cnpq_id` | str(64) | unique, non-empty |
+
+Portal-owned boundary table (Art. VII): the canonical `Researcher` carries
+only `cnpq_url`. Populated during seeding by extracting the lattes id from
+`cnpq_url` (`lattes.cnpq.br/<digits>`, within the seed transaction) and at
+admin registration when a `cnpq_id` is given; used to link subsequent logins
+for the same professor to the already-saved `Researcher` instead of creating
+a duplicate. Only researchers whose source row carries a `cnpq_url` are
+linkable by lattes id.
+
 ## 3. Validation rules (Model/Service invariants)
 
 - Researcher name MUST be non-empty (Model layer).

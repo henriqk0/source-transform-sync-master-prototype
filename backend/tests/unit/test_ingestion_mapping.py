@@ -34,6 +34,13 @@ def test_researchers_mapped_with_campus_and_resume(session_factory, seeded):
     assert provider.researchers.get_by_id(2).name == "Joao da Silva"
 
 
+def test_lattes_id_extracted_from_cnpq_url_for_linking(session_factory, seeded):
+    provider = RepositoryProvider(session_factory)
+    assert provider.researcher_cnpqs.researcher_for("1111222233334444") == 1
+    # Researchers without a cnpq_url get no mapping.
+    assert provider.researcher_cnpqs.researcher_for("9999999999999999") is None
+
+
 def test_articles_mapped_with_authors_and_counts(session_factory, seeded):
     provider = RepositoryProvider(session_factory)
     article = provider.articles.get_by_id(100)
